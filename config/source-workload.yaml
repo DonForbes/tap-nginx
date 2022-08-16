@@ -7,7 +7,8 @@ metadata:
     apps.tanzu.vmware.com/workload-type: tcp
     app.kubernetes.io/part-of: tanzu-nginx
 spec:
-  source: harbor.donaldforbes.com/images/nginx:latest
-  env:
-  - name: port
-    value: 8080
+  source: 
+    git:
+      ref:
+        branch: main
+      url: https://github.com/dforbes-pivotal/tap-nginx.git
