@@ -1,0 +1,75 @@
+apiVersion: carto.run/v1alpha1
+kind: ClusterConfigTemplate
+metadata:
+  name: deployment-and-service-template
+spec:
+  configPath: .data
+  ytt: |
+    #@ load("@ytt:data", "data")
+    #@ load("@ytt:yaml", "yaml")
+
+    #@ def merge_labels(fixed_values):
+    #@   labels = {}
+    #@   if hasattr(data.values.workload.metadata, "labels"):
+    #@     labels.update(data.values.workload.metadata.labels)
+    #@   end
+    #@   labels.update(fixed_values)
+    #@   return labels
+    #@ end
+
+    #@ def delivery():
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: #@ data.values.workload.metadata.name
+      annotations:
+        kapp.k14s.io/update-strategy: "fallback-on-replace"
+      labels: #@ merge_labels({ "app.kubernetes.io/component": "run", "carto.run/workload-name": data.values.workload.metadata.name })
+    spec:
+      selector:
+        matchLabels: #@ data.values.config.metadata.labels
+      template: #@ data.values.config
+    #@ end
+
+    #@ def merge_ports(ports_spec, containers):
+    #@   ports = {}
+    #@   for c in containers:
+    #@     for p in getattr(c, "ports", []):
+    #@       ports[p.containerPort] = {"targetPort": p.containerPort, "port": p.containerPort, "name": getattr(p, "name", str(p.containerPort))}
+    #@     end
+    #@   end
+    #@   for p in ports_spec:
+    #@     ports[p.port] = {"targetPort": getattr(p, "containerPort", p.port), "port": p.port, "name": getattr(p, "name", str(p.port))}
+    #@   end
+    #@   return ports.values()
+    #@ end
+
+
+    #@ def services():
+    ---
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: #@ data.values.workload.metadata.name
+      labels: #@ merge_labels({ "app.kubernetes.io/component": "run", "carto.run/workload-name": data.values.workload.metadata.name })
+    spec:
+      selector: #@ data.values.config.metadata.labels
+      ports:
+      #@ declared_ports = {}
+      #@ if "ports" in data.values.params:
+      #@   declared_ports = data.values.params.ports
+      #@ end
+      #@ for p in merge_ports(declared_ports, data.values.config.spec.containers):
+      - #@ p
+      #@ end
+    #@ end
+
+    ---
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: #@ data.values.workload.metadata.name + "-base"
+      labels: #@ merge_labels({ "app.kubernetes.io/component": "config" })
+    data:
+      delivery.yml: #@ yaml.encode(delivery())
+      service.yaml: #@ yaml.encode(services())
