@@ -8,8 +8,8 @@ metadata:
     app.kubernetes.io/part-of: tanzu-nginx
 spec:
   env:
-  - name: port
-    value: 8080
+    - name: port
+      value: "8080"
   source: 
     git:
       ref:
