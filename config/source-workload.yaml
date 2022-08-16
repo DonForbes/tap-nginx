@@ -1,0 +1,13 @@
+
+apiVersion: carto.run/v1alpha1
+kind: Workload
+metadata:
+  name: tanzu-nginx
+  labels:
+    apps.tanzu.vmware.com/workload-type: tcp
+    app.kubernetes.io/part-of: tanzu-nginx
+spec:
+  source: harbor.donaldforbes.com/images/nginx:latest
+  env:
+  - name: port
+    value: 8080
