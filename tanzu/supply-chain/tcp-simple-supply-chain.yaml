@@ -12,7 +12,7 @@ spec:
     name: gitops_user_email
   - default: supplychain@cluster.local
     name: gitops_commit_message
-  - default: DEFAULT-GIT-SECRET
+  - default: dforbes-pivotal-https
     name: gitops_ssh_secret
   - default:
     - containerPort: 8080
@@ -33,11 +33,11 @@ spec:
     params:
     - name: registry
       value:
-        repository: REGISTRY-REPO
-        server: REGISTRY-SERVER
+        repository: aws-tap/supply-chain
+        server: harbor.donaldforbes.com
         # Add this key if you have set ca_cert_data in tap-values.yaml
-        - name: ca_cert_data
-          value: CERT-AS-STRING
+        #- name: ca_cert_data
+        #  value: CERT-AS-STRING
     templateRef:
       kind: ClusterTemplate
       name: deliverable-template
@@ -49,11 +49,11 @@ spec:
       value: default
     - name: registry
       value:
-        repository: REGISTRY-REPO
-        server: REGISTRY-SERVER
+        repository: aws-tap/supply-chain
+        server: harbor.donaldforbes.com
         # Add this key if you have set ca_cert_data in tap-values.yaml
-        - name: ca_cert_data
-          value: CERT-AS-STRING
+        #- name: ca_cert_data
+        3  value: CERT-AS-STRING
     sources:
     - name: source
       resource: source-provider
@@ -93,11 +93,11 @@ spec:
       value: default
     - name: registry
       value:
-        repository: REGISTRY-REPO
-        server: REGISTRY-SERVER
+        repository: aws-tap/supply-chain
+        server: harbor.donaldforbes.com
         # Add this key if you have set ca_cert_data in tap-values.yaml
-        - name: ca_cert_data
-          value: CERT-AS-STRING
+        #- name: ca_cert_data
+        #  value: CERT-AS-STRING
     templateRef:
       kind: ClusterTemplate
       name: config-writer-template
