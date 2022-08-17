@@ -9,7 +9,7 @@ metadata:
 spec:
   env:
   - name: port
-    value: "8080"
+    value: 8080
   source: 
     git:
       ref:
