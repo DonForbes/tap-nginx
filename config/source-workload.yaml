@@ -7,6 +7,9 @@ metadata:
     apps.tanzu.vmware.com/workload-type: tcp
     app.kubernetes.io/part-of: tanzu-nginx
 spec:
+  params:
+    - name: URL
+      value: tanzu-nginx.donald.ingress.aws-tap.donaldforbes.com
   env:
   - name: PORT
     value: 8080
