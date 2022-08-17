@@ -64,6 +64,23 @@ spec:
       #@ end
     #@ end
 
+    #@ def httpproxy():
+    ---
+    apiVersion: projectcontour.io/v1
+    kind: HTTPProxy
+    metadata:
+      name: #@ data.values.workload.metadata.name
+      labels: #@ merge_labels({ "app.kubernetes.io/component": "run", "carto.run/workload-name": data.values.workload.metadata.name })
+    spec:
+      routes:
+      - conditions:
+        - prefix: /
+          services:
+          - name: #@ data.values.workload.metadata.name
+            port: 8080
+      virtualhost:
+        fqdn: #@ data.values.workload.spec.params.TODO
+    #@ end
     ---
     apiVersion: v1
     kind: ConfigMap
@@ -73,3 +90,5 @@ spec:
     data:
       delivery.yml: #@ yaml.encode(delivery())
       service.yaml: #@ yaml.encode(services())
+      httpproxy.yaml: #@yaml.encode(httpproxy())
+      
