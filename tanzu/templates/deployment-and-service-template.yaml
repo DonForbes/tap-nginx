@@ -16,6 +16,17 @@ spec:
     #@   labels.update(fixed_values)
     #@   return labels
     #@ end
+    
+    #@ def param(key):
+    #@ for param in data.values.workload.spec.params:
+    #@   if param.name == key:
+    #@     return param.value
+    #@     break
+    #@   end
+    #@ end
+    #! Return a None if no value set.
+    #@ return None
+    #@ end
 
     #@ def delivery():
     apiVersion: apps/v1
@@ -79,7 +90,7 @@ spec:
           - name: #@ data.values.workload.metadata.name
             port: 8080
       virtualhost:
-        fqdn: #@ data.values.workload.spec.params.TODO
+        fqdn: #@ param("URL")
     #@ end
     ---
     apiVersion: v1
@@ -91,4 +102,3 @@ spec:
       delivery.yml: #@ yaml.encode(delivery())
       service.yaml: #@ yaml.encode(services())
       httpproxy.yaml: #@yaml.encode(httpproxy())
-      
