@@ -35,7 +35,7 @@ spec:
   - name: image-provider
     params:
       - name: serviceAccount
-        value: defauilt
+        value: default
     templateRef:
       kind: ClusterImageTemplate
       name: image-provider-template
