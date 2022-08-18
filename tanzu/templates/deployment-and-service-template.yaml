@@ -101,4 +101,4 @@ spec:
     data:
       delivery.yml: #@ yaml.encode(delivery())
       service.yaml: #@ yaml.encode(services())
-      httpproxy.yaml: #@yaml.encode(httpproxy())
+      httpproxy.yaml: #@ yaml.encode(httpproxy())
