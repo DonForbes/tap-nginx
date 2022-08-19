@@ -1,12 +1,15 @@
 apiVersion: carto.run/v1alpha1
 kind: Workload
 metadata:
-  name: tanzu-nginx
+  name: tanzu-nginx-image
   labels:
     apps.tanzu.vmware.com/workload-type: tcp
-    app.kubernetes.io/part-of: tanzu-nginx
+    app.kubernetes.io/part-of: tanzu-nginx-image
 spec:
-  image: harbor.donaldforbes.com/images/nginx:latest
+  params:
+    - name: URL
+      value: tanzu-nginx-image.donald.ingress.aws-tap.donaldforbes.com
+  image: nginxinc/nginx-unprivileged
   env:
-  - name: port
+  - name: PORT
     value: 8080
