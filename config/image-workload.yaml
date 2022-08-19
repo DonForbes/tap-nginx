@@ -9,7 +9,7 @@ spec:
   params:
     - name: URL
       value: tanzu-nginx-image.donald.ingress.aws-tap.donaldforbes.com
-  image: nginxinc/nginx-unprivileged
+  image: harbor.donaldforbes.com/apps/nginx-unprivileged@sha256:f0d7519038f4e4caf00ed112216b260226aad99284ec87cdab2030ad31a0b2f5
   env:
   - name: PORT
     value: 8080
